@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: netflix-app
-        image: emlykf/netflix:latest
+        image: emlykf/netflix:21
         ports:
         - containerPort: 80
