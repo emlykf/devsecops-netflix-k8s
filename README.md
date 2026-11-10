@@ -20,6 +20,33 @@ Based on Cloud Champ's Netflix DevSecOps tutorial. I changed the pipeline so it 
 
 ## Security Hardening
 
+<details>
+<summary><b>Screenshots before the hardening</b></summary>
+
+<img src="images/dependency-check-before.png" alt="Dependency-Check before" width="400">
+
+<img src="images/trivy-before-package-lock.png" alt="Trivy before: package-lock.json, 34 high" width="400">
+
+<img src="images/trivy-before-yarn.png" alt="Trivy before: yarn.lock, 22 high" width="400">
+
+<img src="images/trivy-image-before.png" alt="Trivy image scan before: 1 medium" width="400">
+
+</details>
+
+<details>
+<summary><b>Screenshots after the hardening</b></summary>
+
+<img src="images/dependency-check-after.png" alt="Dependency-Check after" width="400">
+
+<img src="images/trivy-after.png" alt="Trivy filesystem scan after" width="650">
+
+<img src="images/trivy-image-after.png" alt="Trivy image scan after" width="650">
+
+<img src="images/sonarqube-after.png" alt="SonarQube after" width="650">
+
+</details>
+<br>
+
 **What I changed:**
 
 - **Security groups:** every port is only open to my IP, plus the exact servers that need it (for example, Prometheus can reach Jenkins, but nobody else can).
@@ -32,7 +59,7 @@ Based on Cloud Champ's Netflix DevSecOps tutorial. I changed the pipeline so it 
 **Results:**
 
 - **Dependency-Check:** 1 critical and 14 high findings before, 2 medium after.
-- **Trivy (code):** 56 high findings before, 2 medium after. Both are in React Router and only fixed in version 7.
+- **Trivy (code):** 56 high findings before (34 in `package-lock.json` and 22 in `yarn.lock`), 2 medium after. Both are in React Router and only fixed in version 7.
 - **Trivy (image):** 1 medium before, 0 after.
 - **SonarQube:** the same 3 security findings before and after. All 3 are in the Dockerfile: two because the TMDB key is passed into the build, and one because nginx runs as root. Moving the key in the Dockerfile wouldn't make it safer, because the app puts it into the frontend JavaScript anyway. The real fixes are listed below under next improvements.
 
